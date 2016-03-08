@@ -1,5 +1,5 @@
 {
-	"name" : "nvbooster/PHPCRAssets",
+	"name" : "nvbooster/phpcr-assets-bundle",
 	"type" : "symfony-bundle",
 	"description" : "Bundle for storing and serving js, css assets with PHPCR Storage",
 	"homepage" : "https://github.com/nvbooster/PHPCRAssets",

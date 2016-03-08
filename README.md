@@ -10,13 +10,13 @@ Bundle for storing and serving js, css assets with PHPCR Storage.
 Include this to you composer.json file
 
 ``` js
-"nvbooster/PHPCRAssets": "dev-master"
+"nvbooster/phpcr-assets-bundle": "dev-master"
 ```
 
 or run 
 
 ```sh
-composer require nvbooster/PHPCRAssets:dev-master
+composer require nvbooster/phpcr-assets-bundle-master
 ```
 
 Ensure CmfRoutingAutoBundle is installed and configured according to https://github.com/symfony-cmf/RoutingAutoBundle
