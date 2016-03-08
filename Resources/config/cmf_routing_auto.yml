@@ -1,0 +1,6 @@
+NVBooster\PHPCRAssetsBundle\Asset\BaseAsset:
+    uri_schema: /{prefix}/{name}{_format}
+    token_providers:
+        prefix: [asset_prefix]
+        name: [content_method, { method: getName }]
+        _format: [content_method, { method: getExtension, slugify: false }]

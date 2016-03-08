@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<parameters>
+		<parameter key="nvbooster_assets.phpcr.root">/cms/assets</parameter>
+		<parameter key="nvbooster_assets.controller.class">NVBooster\PHPCRAssetsBundle\Controller\AssetController</parameter>
+		<parameter key="nvbooster_assets.routing.prefix_provider.class">NVBooster\PHPCRAssetsBundle\Routing\AssetPrefixTokenProvider</parameter>
+	</parameters>
+	
+    <services>
+        <service id="nvbooster_assets.controller" class="%nvbooster_assets.controller.class%">
+            <argument type="service" id="assetic.filter_manager" />
+            <argument type="service" id="kernel" />
+        </service>
+        
+        <service id="nvbooster_assets.routing.prefix_provider" class="%nvbooster_assets.routing.prefix_provider.class%">
+            <argument/>
+            <tag name="cmf_routing_auto.token_provider" alias="asset_prefix"/>
+        </service>
+        
+     	<service id="nvbooster_assets.phpcr.initializer" class="Doctrine\Bundle\PHPCRBundle\Initializer\GenericInitializer">
+			<argument>PHPCR Assets</argument>
+			<tag name="doctrine_phpcr.initializer" />
+		</service>
+    </services>
+</container>

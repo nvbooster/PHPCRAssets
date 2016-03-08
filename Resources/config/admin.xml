@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<parameters>
+		<parameter key="nvbooster_assets.asset_admin.class">NVBooster\PHPCRAssetsBundle\Admin\BaseAssetAdmin</parameter>		
+		<parameter key="nvbooster_assets.js_asset_admin.class">NVBooster\PHPCRAssetsBundle\Admin\JsAssetAdmin</parameter>		
+		<parameter key="nvbooster_assets.css_asset_admin.class">NVBooster\PHPCRAssetsBundle\Admin\CssAssetAdmin</parameter>		
+	</parameters>
+	
+    <services>
+		<service id="nvbooster_assets.asset_admin" class="%nvbooster_assets.asset_admin.class%">
+			<argument></argument>
+			<argument>NVBooster\PHPCRAssetsBundle\Asset\BaseAsset</argument>
+			<argument>SonataAdminBundle:CRUD</argument>
+			<tag name="sonata.admin" manager_type="doctrine_phpcr" group="nvbooster_assets" label="Base Asset" />			
+			<call method="setRootPath">
+			    <argument>%nvbooster_assets.phpcr.root%</argument>
+			</call>
+		</service>
+		
+		<service id="nvbooster_assets.js_asset_admin" class="%nvbooster_assets.js_asset_admin.class%">
+			<argument></argument>
+			<argument>NVBooster\PHPCRAssetsBundle\Asset\JsAsset</argument>
+			<argument>SonataAdminBundle:CRUD</argument>
+			<tag name="sonata.admin" manager_type="doctrine_phpcr" group="nvbooster_assets" label="Js Asset" />			
+			<call method="setRootPath">
+			    <argument>%nvbooster_assets.phpcr.root%</argument>
+			</call>
+		</service>
+		
+		<service id="nvbooster_assets.css_asset_admin" class="%nvbooster_assets.css_asset_admin.class%">
+			<argument></argument>
+			<argument>NVBooster\PHPCRAssetsBundle\Asset\CssAsset</argument>
+			<argument>SonataAdminBundle:CRUD</argument>
+			<tag name="sonata.admin" manager_type="doctrine_phpcr" group="nvbooster_assets" label="Css Asset" />			
+			<call method="setRootPath">
+			    <argument>%nvbooster_assets.phpcr.root%</argument>
+			</call>
+		</service>
+    </services>
+</container>

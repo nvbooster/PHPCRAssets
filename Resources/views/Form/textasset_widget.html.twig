@@ -1,0 +1,18 @@
+{#% form_theme form _self %#}
+
+{% block textasset_widget %}
+	{{ block('textarea_widget') }}
+    {% spaceless %}             
+        {% for js_uri in phpcrassets_codemirror_js(codemirror) %}
+        	<script type="text/javascript" src="{{ asset(js_uri) }}"></script>
+        {% endfor %}
+
+        {% for css_uri in phpcrassets_codemirror_css(codemirror) %}
+			<link rel="stylesheet" href="{{ asset(css_uri) }}" />
+        {% endfor %}
+            
+        <script>
+            CodeMirror.fromTextArea(document.getElementById("{{ id }}"), {{ phpcrassets_codemirror_params(codemirror)|raw }});
+        </script>
+    {% endspaceless %}
+{% endblock %}
