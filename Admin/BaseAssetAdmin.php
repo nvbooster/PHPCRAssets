@@ -17,14 +17,14 @@ use PHPCR\Util\PathHelper;
  * @author nvb <nvb@aproxima.ru>
  */
 class BaseAssetAdmin extends Admin
-{   
+{
     /**
      * {@inheritDoc}
      *
      * @var string
      */
     protected $baseRouteName = 'admin_cmf_assets_baseasset';
-    
+
     /**
      * {@inheritDoc}
      *
@@ -36,12 +36,12 @@ class BaseAssetAdmin extends Admin
      * @var boolean
      */
     protected $codeMirrorEnabled = false;
-    
+
     /**
      * @var array
      */
     protected $codeMirrorParams = array();
-    
+
     /**
      * {@inheritDoc}
      *
@@ -53,7 +53,7 @@ class BaseAssetAdmin extends Admin
             ->addIdentifier('id', 'text')
             ->addIdentifier('name', 'text')
             ->addIdentifier('extension', 'text');
-        
+
     }
 
     /**
@@ -66,7 +66,7 @@ class BaseAssetAdmin extends Admin
         $group = $formMapper
             ->with('General')
                 ->add('name', 'text');
-                   
+
         $asset = $this->getSubject();
 
         if ($this->codeMirrorEnabled) {
@@ -78,7 +78,7 @@ class BaseAssetAdmin extends Admin
                 $codeMirrorParams['lineNumbers'] = true;
                 $codeMirrorParams['mode'] = 'css';
             }
-            
+
             $group->add('content', 'textasset', array(
                 'required' => false,
                 'codemirror' => $codeMirrorParams
@@ -120,7 +120,7 @@ class BaseAssetAdmin extends Admin
         ? $object->getName()
         : $this->trans('link_add', array(), 'SonataAdminBundle');
     }
-    
+
     /**
      * Replaces textarea with code mirror input
      */
@@ -128,7 +128,7 @@ class BaseAssetAdmin extends Admin
     {
         $this->codeMirrorEnabled = true;
     }
-    
+
     /**
      * Uses plain textarea
      */
@@ -136,7 +136,7 @@ class BaseAssetAdmin extends Admin
     {
         $this->codeMirrorEnabled = false;
     }
-    
+
     /**
      * @return array
      */
@@ -144,7 +144,7 @@ class BaseAssetAdmin extends Admin
     {
         return $this->codeMirrorParams;
     }
-    
+
     /**
      * @param $params array
      */
@@ -152,7 +152,7 @@ class BaseAssetAdmin extends Admin
     {
         $this->codeMirrorParams = $params;
     }
-    
+
     /**
      * {@inheritdoc}
      * @see \Sonata\AdminBundle\Admin\Admin::getNewInstance()
@@ -162,13 +162,13 @@ class BaseAssetAdmin extends Admin
         /* @var $object BaseAsset */
         $object = parent::getNewInstance();
         $object->setParentDocument($this->getModelManager()->find(null, $this->getRootPath()));
-    
+
         return $object;
     }
-    
+
     /**
      * @{inheritdocs}
-     * 
+     *
      * @see https://github.com/sonata-project/SonataDoctrinePhpcrAdminBundle/issues/354
      */
     public function getSubject()
@@ -184,8 +184,8 @@ class BaseAssetAdmin extends Admin
                 $this->subject = $this->getModelManager()->find(null, $id);
             }
         }
-    
+
         return $this->subject;
     }
-    
+
 }

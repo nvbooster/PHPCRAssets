@@ -18,22 +18,22 @@ class AssetController
      * @var FilterManager
      */
     private $filterManager;
-    
+
     /**
      * @var boolean
      */
-    private $isDebug = false; 
-    
+    private $isDebug = false;
+
     /**
      * @var array
      */
     private $cssFilters = array();
-    
+
     /**
      * @var array
      */
     private $jsFilters = array();
-     
+
     /**
      * @param KernelInterface $kernel
      * @param array           $filters
@@ -43,7 +43,7 @@ class AssetController
         if ($kernel) {
             $this->isDebug = $kernel->isDebug();
         }
-        
+
         if (is_array($filters)) {
             if (key_exists('js', $filters)) {
                 if (is_array($filters['js'])) {
@@ -52,22 +52,23 @@ class AssetController
             }
             if (key_exists('css', $filters)) {
                 if (is_array($filters['css'])) {
-                    $this->jsFilters = $filters['css'];
+                    $this->cssFilters = $filters['css'];
                 }
             }
         }
+
+        $this->filterManager = $filterManager;
     }
-    
+
     /**
      * @param Request $request
-     * @param object  $assetDocument
+     * @param object  $contentDocument
      * @param array   $filters
      *
      * @return Response
      */
     public function serveAsset(Request $request, $contentDocument, $filters = array())
     {
-
         $response = new Response();
         $response->setStatusCode(200);
         $response->setLastModified($contentDocument->getUpdatedAt());
@@ -108,15 +109,15 @@ class AssetController
     {
         if ($filters === false) {
             $mergedFilters = array();
-        } elseif ($filters) {
+        } elseif (count($filters)) {
             $mergedFilters = $filters;
         } else {
             $mergedFilters = $this->jsFilters;
         }
-        
+
         $response = $this->serveAsset($request, $contentDocument, $mergedFilters);
         $response->headers->set('Content-Type', 'text/javascript');
-        
+
         return $response;
     }
 
@@ -133,15 +134,15 @@ class AssetController
     {
         if ($filters === false) {
             $mergedFilters = array();
-        } elseif ($filters) {
+        } elseif (count($filters)) {
             $mergedFilters = $filters;
         } else {
             $mergedFilters = $this->cssFilters;
         }
-        
+
         $response = $this->serveAsset($request, $contentDocument, $mergedFilters);
         $response->headers->set('Content-Type', 'text/css');
-        
+
         return $response;
     }
 }

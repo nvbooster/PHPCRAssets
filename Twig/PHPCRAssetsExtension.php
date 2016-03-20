@@ -23,12 +23,12 @@ class PHPCRAssetsExtension extends \Twig_Extension
      * @var string
      */
     private $themesDir;
-    
+
     /**
-     * @var string
+     * @var array
      */
     private $rendered;
-    
+
     /**
      * @param array $paths
      */
@@ -38,7 +38,7 @@ class PHPCRAssetsExtension extends \Twig_Extension
         $this->cssPath = key_exists('css', $paths) ? $paths['css'] : false;
         $this->modesDir = key_exists('modes_dir', $paths) ? $paths['modes_dir'] : false;
         $this->themesDir = key_exists('themes_dir', $paths) ? $paths['themes_dir'] : false;
-        
+
         $this->rendered = array();
     }
 
@@ -59,63 +59,63 @@ class PHPCRAssetsExtension extends \Twig_Extension
      * @param array $parameters
      */
     public function parametersRender($parameters)
-    {           
+    {
         return json_encode($parameters);
     }
 
     /**
      * @param array  $parameters
      * @param string $force
-     * 
+     *
      * @return array
      */
     public function getJs($parameters, $force = false)
     {
         $urls = array();
-        
+
         if ($this->jsPath) {
-            $urls[] = $this->jsPath; 
+            $urls[] = $this->jsPath;
         }
-        
+
         if ($this->modesDir) {
             $urls[] = preg_replace('@\/$@', '', $this->modesDir) . '/' . $parameters['mode'] . '/' . $parameters['mode'] . '.js';
         }
-        
-        
+
+
         if (!$force) {
-            $urls = array_diff($urls, $this->rendered); 
+            $urls = array_diff($urls, $this->rendered);
         }
-        
+
         $this->rendered = array_unique(array_merge($this->rendered, $urls));
-        
+
         return $urls;
     }
 
     /**
      * @param array  $parameters
      * @param string $force
-     * 
+     *
      * @return array
      */
     public function getCss($parameters, $force = false)
     {
         $urls = array();
-        
+
         if ($this->cssPath) {
             $urls[] = $this->cssPath;
         }
-        
+
         if ($this->modesDir) {
             $urls[] = preg_replace('@\/$@', '', $this->themesDir) . '/' . $parameters['theme'] . '.css';
         }
-        
-        
+
+
         if (!$force) {
             $urls = array_diff($urls, $this->rendered);
         }
-        
+
         $this->rendered = array_unique(array_merge($this->rendered, $urls));
-        
+
         return $urls;
     }
 
