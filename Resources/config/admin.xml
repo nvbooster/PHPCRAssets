@@ -6,8 +6,6 @@
 
 	<parameters>
 		<parameter key="nvbooster_assets.asset_admin.class">NVBooster\PHPCRAssetsBundle\Admin\BaseAssetAdmin</parameter>		
-		<parameter key="nvbooster_assets.js_asset_admin.class">NVBooster\PHPCRAssetsBundle\Admin\JsAssetAdmin</parameter>		
-		<parameter key="nvbooster_assets.css_asset_admin.class">NVBooster\PHPCRAssetsBundle\Admin\CssAssetAdmin</parameter>		
 	</parameters>
 	
     <services>
@@ -15,30 +13,17 @@
 			<argument></argument>
 			<argument>NVBooster\PHPCRAssetsBundle\Asset\BaseAsset</argument>
 			<argument>SonataAdminBundle:CRUD</argument>
-			<tag name="sonata.admin" manager_type="doctrine_phpcr" group="nvbooster_assets" label="Base Asset" />			
+			<tag name="sonata.admin" manager_type="doctrine_phpcr" group="nvbooster_assets" label="Assets" />			
 			<call method="setRootPath">
 			    <argument>%nvbooster_assets.phpcr.root%</argument>
 			</call>
-		</service>
-		
-		<service id="nvbooster_assets.js_asset_admin" class="%nvbooster_assets.js_asset_admin.class%">
-			<argument></argument>
-			<argument>NVBooster\PHPCRAssetsBundle\Asset\JsAsset</argument>
-			<argument>SonataAdminBundle:CRUD</argument>
-			<tag name="sonata.admin" manager_type="doctrine_phpcr" group="nvbooster_assets" label="Js Asset" />			
-			<call method="setRootPath">
-			    <argument>%nvbooster_assets.phpcr.root%</argument>
-			</call>
-		</service>
-		
-		<service id="nvbooster_assets.css_asset_admin" class="%nvbooster_assets.css_asset_admin.class%">
-			<argument></argument>
-			<argument>NVBooster\PHPCRAssetsBundle\Asset\CssAsset</argument>
-			<argument>SonataAdminBundle:CRUD</argument>
-			<tag name="sonata.admin" manager_type="doctrine_phpcr" group="nvbooster_assets" label="Css Asset" />			
-			<call method="setRootPath">
-			    <argument>%nvbooster_assets.phpcr.root%</argument>
-			</call>
+	        <call method="setSubClasses">
+	            <argument type="collection">	            
+	                <argument key="Base Asset">NVBooster\PHPCRAssetsBundle\Asset\BaseAsset</argument>
+	                <argument key="Js Asset">NVBooster\PHPCRAssetsBundle\Asset\JsAsset</argument>
+	                <argument key="Css Asset">NVBooster\PHPCRAssetsBundle\Asset\CssAsset</argument>
+	            </argument>
+	        </call><!-- -->
 		</service>
     </services>
 </container>

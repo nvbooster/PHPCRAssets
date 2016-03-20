@@ -28,8 +28,6 @@ class NVBoosterPHPCRAssetsExtension extends Extension implements PrependExtensio
         
         if (key_exists('codemirror', $config)) {
             $loader->load('form.xml');
-        
-             
             
             if (key_exists('paths', $config['codemirror'])) {
                 $container
@@ -56,12 +54,6 @@ class NVBoosterPHPCRAssetsExtension extends Extension implements PrependExtensio
             if (key_exists('codemirror', $config)) {
                 $container
                     ->getDefinition('nvbooster_assets.asset_admin')
-                    ->addMethodCall('enableCodeMirror');
-                $container
-                    ->getDefinition('nvbooster_assets.js_asset_admin')
-                    ->addMethodCall('enableCodeMirror');
-                $container
-                    ->getDefinition('nvbooster_assets.css_asset_admin')
                     ->addMethodCall('enableCodeMirror');
             }
         }

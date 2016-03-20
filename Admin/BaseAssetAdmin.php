@@ -6,6 +6,10 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use NVBooster\PHPCRAssetsBundle\Asset\BaseAsset;
+use NVBooster\PHPCRAssetsBundle\Asset\CssAsset;
+use NVBooster\PHPCRAssetsBundle\Asset\JsAsset;
+use PHPCR\Util\UUIDHelper;
+use PHPCR\Util\PathHelper;
 
 /**
  * AssetAdmin
@@ -34,6 +38,11 @@ class BaseAssetAdmin extends Admin
     protected $codeMirrorEnabled = false;
     
     /**
+     * @var array
+     */
+    protected $codeMirrorParams = array();
+    
+    /**
      * {@inheritDoc}
      *
      * @see \Sonata\AdminBundle\Admin\Admin::configureListFields()
@@ -42,7 +51,9 @@ class BaseAssetAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id', 'text')
-            ->addIdentifier('name', 'text');
+            ->addIdentifier('name', 'text')
+            ->addIdentifier('extension', 'text');
+        
     }
 
     /**
@@ -55,11 +66,22 @@ class BaseAssetAdmin extends Admin
         $group = $formMapper
             ->with('General')
                 ->add('name', 'text');
-                
+                   
+        $asset = $this->getSubject();
+
         if ($this->codeMirrorEnabled) {
+            $codeMirrorParams = $this->getCodeMirrorParams();
+            if ($asset instanceof JsAsset) {
+                $codeMirrorParams['lineNumbers'] = true;
+                $codeMirrorParams['mode'] = 'javascript';
+            } elseif ($asset instanceof CssAsset) {
+                $codeMirrorParams['lineNumbers'] = true;
+                $codeMirrorParams['mode'] = 'css';
+            }
+            
             $group->add('content', 'textasset', array(
                 'required' => false,
-                'codemirror' => $this->getCodeMirrorParams()
+                'codemirror' => $codeMirrorParams
             ));
         } else {
             $group->add('content', 'textarea');
@@ -118,9 +140,17 @@ class BaseAssetAdmin extends Admin
     /**
      * @return array
      */
-    protected function getCodeMirrorParams()
+    public function getCodeMirrorParams()
     {
-        return array();
+        return $this->codeMirrorParams;
+    }
+    
+    /**
+     * @param $params array
+     */
+    public function setCodeMirrorParams(array $params)
+    {
+        $this->codeMirrorParams = $params;
     }
     
     /**
@@ -134,6 +164,28 @@ class BaseAssetAdmin extends Admin
         $object->setParentDocument($this->getModelManager()->find(null, $this->getRootPath()));
     
         return $object;
+    }
+    
+    /**
+     * @{inheritdocs}
+     * 
+     * @see https://github.com/sonata-project/SonataDoctrinePhpcrAdminBundle/issues/354
+     */
+    public function getSubject()
+    {
+        if ($this->subject === null && $this->request) {
+            $id = $this->request->get($this->getIdParameter());
+            if (!preg_match('#^[0-9A-Za-z/\-_]+$#', $id)) {
+                $this->subject = false;
+            } else {
+                if (!UUIDHelper::isUUID($id)) {
+                    $id = PathHelper::absolutizePath($id, '/');
+                }
+                $this->subject = $this->getModelManager()->find(null, $id);
+            }
+        }
+    
+        return $this->subject;
     }
     
 }
